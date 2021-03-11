@@ -1,0 +1,26 @@
+{
+    "name": "clems",
+    "version": "1.0.0",
+    "description": "Centralized Local Event Management System",
+    "main": "server.js",
+    "scripts": {
+        "dev": "nodemon"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/hnnazm/CLEMS.git"
+    },
+    "author": "Hannan Azmi",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/hnnazm/CLEMS/issues"
+    },
+    "homepage": "https://github.com/hnnazm/CLEMS#readme",
+    "dependencies": {
+        "express": "^4.17.1",
+        "express-session": "^1.17.1"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.7"
+    }
+}
