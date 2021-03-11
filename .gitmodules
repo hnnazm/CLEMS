@@ -1,0 +1,3 @@
+[submodule "CLEMS-Frontend"]
+	path = CLEMS-Frontend
+	url = https://github.com/hnnazm/CLEMS-Frontend.git
