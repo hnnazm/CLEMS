@@ -105,3 +105,6 @@ dist
 
 # VSCode remote container
 .devcontainer/
+
+# VSCode workspace
+CLEMS.code-workspace
