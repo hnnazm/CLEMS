@@ -30,7 +30,7 @@ app.route('/login')
         })
     })
     .post(function (req, res) {
-        if (req.body.username === 'admin' && req.body.pwd === 'secret') {
+        if (req.body.username === 'admin' && req.body.password === 'secret') {
             req.session.isAuthenticate = true;
             res.redirect('/')
         } else {
