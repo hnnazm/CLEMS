@@ -108,3 +108,6 @@ dist
 
 # VSCode workspace
 CLEMS.code-workspace
+
+# macOS
+.DS_Store
