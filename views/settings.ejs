@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLEMS | <%= title %>
+    </title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-content: center;
+            background-color: beige;
+        }
+
+        main > section > ul li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 5px 0;
+            padding: 10px;
+            /* background-color: lightgrey; */
+            border-top: solid 1px lightgrey;
+            border-bottom: solid 1px lightgrey;
+            list-style: none;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>CLEMS: Room Server</h1>
+        <nav>
+            <form action="/logout" method="GET">
+                <input type="submit" value="LogOut">
+            </form>
+        </nav>
+    </header>
+    <main>
+        <h1>OPTIONS</h1>
+        <section>
+            <ul>
+                <li>
+                    <p>Receive Voice Message</p>
+                    <button>Toggle</button>
+                </li>
+                <li>
+                    <p>Receive Image File</p>
+                    <button>Toggle</button>
+                </li>
+                <li>
+                    <p>Muted User(s)</p>
+                    <button>Toggle</button>
+                </li>
+
+            </ul>
+        </section>
+    </main>
+    <footer>
+
+    </footer>
+    <!-- <script src="/socket.io/socket.io.js"></script> -->
+</body>
+
+</html>
