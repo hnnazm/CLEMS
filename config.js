@@ -9,5 +9,6 @@ module.exports = {
         secret: "secret key",
         resave: false,
         saveUninitialized: false
-    }
+    },
+    SOCKET_OPTION: {}
   }
