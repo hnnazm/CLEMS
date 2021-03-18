@@ -10,24 +10,24 @@
 </head>
 
 <body>
-    <header>
-        <h1>CLEMS: Room Server</h1>
-        <nav>
-            <form action="/logout" method="GET">
-                <input type="submit" value="LogOut">
-            </form>
-        </nav>
-    </header>
-    <main>
-        <ul id="messages"></ul>
-        <form id="form" action="">
-            <input id="input" autocomplete="off" /><button>Send</button>
-        </form>
-    </main>
-    <footer>
-
-    </footer>
-    <!-- <script src="/socket.io/socket.io.js"></script> -->
+    <div id="chat-main-container">
+        <div id="chat-container">
+            <div id="chat-header">
+                <p>Room Name</p>
+                <p>Icon</p>
+            </div>
+            <div id="chat-content"></div>
+            <div id="chat-input">
+                <form action="">
+                    <input type="button" value="+">
+                    <input type="text" name="message" id="message">
+                    <input type="button" value="Send">
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="./js/main.js"></script>
 </body>
 
 </html>
