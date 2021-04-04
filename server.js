@@ -20,7 +20,7 @@ app.set('serverSocket', io)     // access with req.app.get()
 app.use(express.urlencoded(config.EXPRESS_URLENCODED_OPTIONS))
 app.use(session(config.SESSION_OPTIONS))
 app.use(express.static(path.resolve(__dirname, 'public'), {index: false}))
-app.use('/', route)
+app.use(route)
 
 mongoose.connect(config.MONGOOSE_URI, config.MONGOOSE_OPTIONS)
 db.on('error', () => console.error('Error connecting to database:'))
