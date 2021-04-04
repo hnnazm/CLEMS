@@ -1,6 +1,9 @@
+const config = require('./config')
+const Data = require('./models/Data')
 const express = require('express')
 const middleware = require('./middleware')
 const router = express.Router()
+const User = require('./models/User')
 
 router.get('/', middleware.checkAuthentication, (req, res) => {
     var io = req.app.get('serverSocket')
@@ -38,15 +41,12 @@ router.get('/', middleware.checkAuthentication, (req, res) => {
     });
 
     res.render('index', {
-        title: 'HOME'
+        title: 'HOME',
     })
 })
 
 router.route('/login')
-    .get(function (req, res) {
-        // res.sendFile(path.join(__dirname, 'public','login.html'))
-        // res.sendFile(path.join(__dirname, 'dist', 'index.html'))
-        // res.send("<h1>Login Page</h1>")
+    .get((req, res) => {
         const error = req.session.error
         req.session.error = null
         res.render('login', {
@@ -54,9 +54,18 @@ router.route('/login')
             error
         })
     })
-    .post(function (req, res) {
-        if (req.body.username === 'admin' && req.body.password === 'secret') {
-            req.session.isAuthenticate = true;
+    .post(async (req, res) => {
+        if (req.body.password === config.ROOM_PASSWORD) {
+            req.session.isAuthenticate = true
+            req.session.username = req.body.username
+
+            // TODO: perform check for IP before creating to avoid duplication
+            await User.create({
+                address: req.sessionID,  // default to null
+                username: req.body.username,
+                role: await User.findOne() ? 'members' : 'admin'
+            })
+
             res.redirect('/')
         } else {
             req.session.error = "Failed to authenticate user"
@@ -70,6 +79,5 @@ router.get('/logout', (req,res) => {
         res.redirect('/login')
     })
 })
-
 
 module.exports = router
