@@ -26,13 +26,4 @@ const userSchema = new mongoose.Schema({
     }
 })
 
-function User(address, username) {
-    this.address = address              // default to null or ''
-    this.username = username
-    this.role = 'members'               // default to members
-
-    return this
-}
-
 module.exports = mongoose.model('User', userSchema)
-// module.exports = User
