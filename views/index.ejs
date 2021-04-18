@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/chat.css">
     <title>CLEMS | <%= title %></title>
 </head>
 
@@ -13,20 +13,26 @@
     <div id="chat-main-container">
         <div id="chat-container">
             <div id="chat-header">
-                <p>Room Name</p>
-                <p>Icon</p>
+                <button id="btn-logout" class="btn-text" type="submit">Logout</button>
+                <h1>Room #1</h1>
+                <button id="btn-settings"class="btn-text" type="submit">Settings</button>
             </div>
             <div id="chat-content"></div>
             <div id="chat-input">
                 <form action="">
-                    <input type="button" value="+">
                     <input type="text" name="message" id="message">
-                    <input type="button" value="Send">
+                    <input type="button" value="M">
+                    <input type="button" value="V">
                 </form>
             </div>
         </div>
     </div>
     <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var iOS = navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+            if (iOS) document.head.querySelector('meta[name="viewport"]').content = "width=device-width, initial-scale=1, maximum-scale=1"
+            else document.head.querySelector('meta[name="viewport"]').content = "width=device-width, initial-scale=1"
+        </script>
     <script src="./js/main.js"></script>
 </body>
 

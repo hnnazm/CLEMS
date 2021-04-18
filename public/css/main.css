@@ -1,7 +1,52 @@
-@import './chat.css';
+:root {
+  --background: #F9FAFB;
+  --red: #DC2626;
+  --dark-red: #991B1B;
+  --gray: #374151;
+  --white: #ffffff;
+  --gray2: #D1D5DB;
+  --shadow: rgba(0, 0, 0, 0.1);
+}
 
-* {
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+header {
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--white);
+  border-bottom: solid 2px var(--gray2);
+  box-shadow: 0 5px 15px 2px var(--shadow)
+}
+
+body {
+  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+  width: 100vw;
+  display: grid;
+  background-color: var(--background);
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+}
+
+.btn-text {
+  padding: 0.5em;
+  border: none;
+  border-radius: 0.5em;
+  color: #ffffff;
 }

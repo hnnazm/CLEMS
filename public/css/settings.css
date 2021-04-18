@@ -1,0 +1,47 @@
+@import './main.css';
+
+body {
+  width: 100vw;
+  background-color: var(--background);
+  grid-template-rows: 1fr 80% 1fr;
+  grid-template-columns: 1fr;
+  align-content: space-between;
+}
+
+header {
+  justify-content: flex-start;
+}
+
+main {
+  padding: 20px 10px;
+}
+
+main > section > ul li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 0;
+  padding: 10px;
+  /* background-color: lightgrey; */
+  border-top: solid 1px lightgrey;
+  border-bottom: solid 1px lightgrey;
+  list-style: none;
+}
+
+.user-action > button {
+  width: 100%;
+  margin: 0.2em 0;
+}
+
+#btn-back {
+  margin-right: 0.5em;
+  background-color: var(--gray);
+}
+
+#btn-export {
+  background-color: var(--gray);
+}
+
+#btn-logout {
+  background-color: var(--red);
+}

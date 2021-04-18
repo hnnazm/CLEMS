@@ -1,74 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CLEMS | <%= title %>
-    </title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
+    <title>CLEMS | <%= title %></title>
+    <link rel="stylesheet" href="./css/settings.css" type="text/css" media="all">
+  </head>
 
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-content: center;
-            background-color: beige;
-        }
-
-        main > section > ul li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 5px 0;
-            padding: 10px;
-            /* background-color: lightgrey; */
-            border-top: solid 1px lightgrey;
-            border-bottom: solid 1px lightgrey;
-            list-style: none;
-        }
-    </style>
-</head>
-
-<body>
+  <body>
     <header>
-        <h1>CLEMS: Room Server</h1>
-        <nav>
-            <form action="/logout" method="GET">
-                <input type="submit" value="LogOut">
-            </form>
-        </nav>
+      <button id="btn-back" class="btn-text" type="submit">Back</button>
+      <h1>CLEMS: Room #1</h1>
     </header>
     <main>
-        <h1>OPTIONS</h1>
-        <section>
-            <ul>
-                <li>
-                    <p>Receive Voice Message</p>
-                    <button>Toggle</button>
-                </li>
-                <li>
-                    <p>Receive Image File</p>
-                    <button>Toggle</button>
-                </li>
-                <li>
-                    <p>Muted User(s)</p>
-                    <button>Toggle</button>
-                </li>
-
-            </ul>
-        </section>
+      <h3>OPTIONS</h3>
+      <section>
+        <ul>
+          <li>
+            <p>Receive Voice Message</p>
+            <button>Toggle</button>
+          </li>
+          <li>
+            <p>Receive Image File</p>
+            <button>Toggle</button>
+          </li>
+          <li>
+            <p>Muted User(s)</p>
+            <button>Toggle</button>
+          </li>
+        </ul>
+      </section>
+      <section class="user-action">
+        <button id="btn-export" class="btn-text" type="submit">Export</button>
+        <button id="btn-logout" class="btn-text" type="submit">Logout</button>
+      </section>
     </main>
     <footer>
 
     </footer>
     <!-- <script src="/socket.io/socket.io.js"></script> -->
-</body>
+    <script charset="utf-8">
+      // Handle the browser frame that affect viewport
+      (function viewport_adjustment() {
+        let vh = window.innerHeight * 0.01
+        document.documentElement.style.setProperty('--vh', `${vh}px`)
+      })()
+      window.addEventListener('resize', () => viewport_adjustment());
+
+      document.querySelector('#btn-back').addEventListener('click', () => window.history.back())
+    </script>
+  </body>
 
 </html>

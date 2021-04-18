@@ -5,64 +5,46 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width">
-    <title>CLEMS | <%= title %>
-    </title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        main {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background-color: aliceblue;
-            text-align: center;
-        }
-
-        form {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .form-container {
-            height: 30%;
-            width: 70%;
-            border: solid 3px black;
-            border-radius: 20px;
-        }
-
-        form > :is(input[type=text],input[type=password]) {
-            margin: 7px 0;
-            padding: 5px;
-            border-radius: 5px;
-        }
-
-    </style>
+    <link rel="stylesheet" href="./css/login.css">
+    <title>CLEMS | <%= title %></title>
 </head>
 
 <body>
-    <main>
+    <header>
         <h1>CLEMS</h1>
         <p>Centralized Local Event Management System</p>
-        <% if (error) { %>
-            <p><%= error %></p>
-        <% } %>
-        <div class="form-container">
+    </header>
+
+    <main>
             <form action="/login" method=POST>
-                <input type="text" name="username" id="username" placeholder="Username">
-                <input type="password" name="password" id="password" placeholder="Room Password">
+                <input type="text" name="username" id="username"
+                placeholder="Username" required>
+                <input type="password" name="password" id="password"
+                placeholder="Room Password" required>
                 <input type="submit" value="Login">
             </form>
-        </div>
     </main>
+
+    <footer>
+        <% if (error) { %>
+            <p class="toast toast-error"><%= error %></p>
+        <% } %>
+    </footer>
+
+    <script>
+        var iOS = navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+        if (iOS) document.head.querySelector('meta[name="viewport"]').content = "width=device-width, initial-scale=1, maximum-scale=1"
+        else document.head.querySelector('meta[name="viewport"]').content = "width=device-width, initial-scale=1"
+
+        // Handle the browser frame that affect viewport
+        function viewport_adjustment() {
+          let vh = window.innerHeight * 0.01
+          document.documentElement.style.setProperty('--vh', `${vh}px`)
+        }
+
+        viewport_adjustment()
+        window.addEventListener('resize', () => viewport_adjustment());
+    </script>
 </body>
 
 </html>
