@@ -6,6 +6,8 @@ const path = require('path')
 const route = require('./route')
 const session = require('express-session')
 const socketIO = require('socket.io')
+const Data = require('./models/Data')
+const User = require('./models/User')
 
 const app = express()
 const server = http.createServer(app)
