@@ -13,14 +13,16 @@ const app = express()
 const server = http.createServer(app)
 const io = socketIO(server, config.SOCKET_OPTIONS)
 const db = mongoose.connection
+const sessionMiddleware = session(config.SESSION_OPTIONS)
 
 app.set('views', path.resolve(__dirname, 'views'))
 app.set('view engine', 'ejs')
+app.set('trust proxy', true)
 app.set('serverSocket', io)     // access with req.app.get()
 // possible to make as middleware?
 
 app.use(express.urlencoded(config.EXPRESS_URLENCODED_OPTIONS))
-app.use(session(config.SESSION_OPTIONS))
+app.use(sessionMiddleware)
 app.use(express.static(path.resolve(__dirname, 'public'), {index: false}))
 app.use(route)
 
@@ -75,5 +77,5 @@ io.on("connection", async socket => {
 });
 
 server.listen(config.PORT, () => {
-    console.log(`Server is running on port ${config.PORT}`)
+    console.log(`Server is running on port ${config.PORT}`) //LOG
 })
