@@ -36,48 +36,49 @@ mongoose.set('useFindAndModify', false)
 io.use((socket, next) => {sessionMiddleware(socket.request, {}, next)})
 
 io.on("connection", async socket => {
-    // session management
-    const session = socket.request.session
-    session.connections++;
-    session.save();
+  // session management
+  const session = socket.request.session
+  session.connections++;
+  session.save();
 
-    const ip = socket.conn.remoteAddress.split(":").pop();
+  const ip = socket.conn.remoteAddress.split(":").pop()
+  let userList = new Array()
 
 
-    //LOG: console.log("New client connected")
-    await User.findOneAndUpdate({ address: socket.request.sessionID }, {
-        // insert socket id to user document
-        socketID: socket.id
-    }, { new: true })
+  //LOG: console.log("New client connected")
+  await User.findOneAndUpdate({ address: socket.request.sessionID }, {
+    // insert socket id to user document
+    socketID: socket.id
+  }, { new: true })
 
-    // Incoming new message
-    socket.on('newMessage', async message => {
-        // const user = await User.findOne({socketID: socket.id})
-        User.findOne({socketID: socket.id}, (err, user) => {
-            //LOG: if (err) console.error(err)
-            Data.create({
-                type: typeof message,
-                data: message,
-                sender: user.id,
-                receiver: 'to you',     // TODO: change to user/room
-                size: 12345             // TODO: insert correct size
-            }, (err, data) => {
-                //LOG: if (err) console.error(err)
-                //LOG: console.log(data)
-                io.emit('receiveMessage', message, {
-                    id: user.socketID,
-                    username: user.username
-                })
-            })
+  // Incoming new message
+  socket.on('newMessage', async message => {
+    // const user = await User.findOne({socketID: socket.id})
+    User.findOne({socketID: socket.id}, (err, user) => {
+      //LOG: if (err) console.error(err)
+      Data.create({
+        type: typeof message,
+        data: message,
+        sender: user.id,
+        receiver: userList,     // TODO: change to user/room
+        size: 12345             // TODO: insert correct size
+      }, (err, data) => {
+          //LOG: if (err) console.error(err)
+          //LOG: console.log(data)
+          io.emit('receiveMessage', message, {
+            id: user.socketID,
+            username: user.username
+          })
         })
     })
+  })
 
-    // Client disconnect
-    socket.on('disconnect', () => {
-        //LOG: console.log("Client disconnect")
-    })
+  // Client disconnect
+  socket.on('disconnect', () => {
+    //LOG: console.log("Client disconnect")
+  })
 });
 
 server.listen(config.PORT, () => {
-    console.log(`Server is running on port ${config.PORT}`) //LOG
+  console.log(`Server is running on port ${config.PORT}`) //LOG
 })
