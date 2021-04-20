@@ -26,6 +26,8 @@ app.use(sessionMiddleware)
 app.use(express.static(path.resolve(__dirname, 'public'), {index: false}))
 app.use(route)
 
+app.locals.title = 'CLEMS'
+
 mongoose.connect(config.MONGOOSE_URI, config.MONGOOSE_OPTIONS)
 mongoose.set('useFindAndModify', false)
 //LOG: db.on('error', () => console.error('Error connecting to database:'))
