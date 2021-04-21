@@ -10,8 +10,8 @@ const dataSchema = new mongoose.Schema({
   sender: {
     type: String
   },
-  receiver: {
-    type: String
+  recipient: {
+    type: [String]
   },
   size: {
     type: Number

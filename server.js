@@ -42,8 +42,6 @@ io.on("connection", async socket => {
   session.save();
 
   const ip = socket.conn.remoteAddress.split(":").pop()
-  let userList = new Array()
-
 
   //LOG: console.log("New client connected")
   await User.findOneAndUpdate({ address: socket.request.sessionID }, {
@@ -53,17 +51,25 @@ io.on("connection", async socket => {
 
   // Incoming new message
   socket.on('newMessage', async message => {
-    // const user = await User.findOne({socketID: socket.id})
+    // TODO: bind with document id for best practice
+    let clientSockets = [...await io.allSockets()].filter(socketID => socketID != socket.id)
+    let recipientList = new Array()
+    clientSockets.forEach(socketID => {
+      User.findOne({ socketID }, (err, user) => {
+        //LOG: if (err) console.error("Error fetching other users: " + err)
+        if (user) recipientList.push(user.id)
+      })
+    })
     User.findOne({socketID: socket.id}, (err, user) => {
-      //LOG: if (err) console.error(err)
+      //LOG: if (err) console.error("Error finding users: " + err)
       Data.create({
         type: typeof message,
         data: message,
         sender: user.id,
-        receiver: userList,     // TODO: change to user/room
+        recipient: recipientList,     // TODO: change to user/room
         size: 12345             // TODO: insert correct size
       }, (err, data) => {
-          //LOG: if (err) console.error(err)
+          //LOG: if (err) console.error("Error creating data: " + err)
           //LOG: console.log(data)
           io.emit('receiveMessage', message, {
             id: user.socketID,
