@@ -1,7 +1,7 @@
 const config = require('./config')
+const db = require('./db')
 const http = require('http')
 const express = require('express')
-const mongoose = require('mongoose')
 const path = require('path')
 const route = require('./route')
 const session = require('express-session')
@@ -12,7 +12,6 @@ const User = require('./models/User')
 const app = express()
 const server = http.createServer(app)
 const io = socketIO(server, config.SOCKET_OPTIONS)
-const db = mongoose.connection
 const sessionMiddleware = session(config.SESSION_OPTIONS)
 
 app.set('views', path.resolve(__dirname, 'views'))
@@ -27,11 +26,6 @@ app.use(express.static(path.resolve(__dirname, 'public'), {index: false}))
 app.use(route)
 
 app.locals.title = 'CLEMS'
-
-mongoose.connect(config.MONGOOSE_URI, config.MONGOOSE_OPTIONS)
-mongoose.set('useFindAndModify', false)
-//LOG: db.on('error', () => console.error('Error connecting to database:'))
-//LOG: db.once('open', () => console.log('Database connected!'))
 
 io.use((socket, next) => {sessionMiddleware(socket.request, {}, next)})
 
