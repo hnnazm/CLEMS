@@ -6,46 +6,61 @@ const User = require('./models/User')
 
 router.get('/', middleware.checkAuthentication, (req, res) => {
   res.render('index', {
-    title: 'HOME',
+    page: 'HOME',
   })
 })
 
 router.get('/settings', middleware.checkAuthentication, (req, res) => {
   res.render('settings', {
-    title: 'SETTINGS',
+    page: 'SETTINGS',
   })
 })
 
 router.route('/login')
-  .get((req, res) => {
-    const error = req.session.error
-    req.session.error = null
-    res.render('login', {
-      title: 'LOGIN',
-      error
-    })
+  .get((req, res, next) => {
+    try {
+      const error = req.session.error
+      res.render('login', {
+        page: 'LOGIN',
+        error
+      })
+    } catch(err) {
+      // LOG: console.error("Failed to load page: " + err)
+      // next("Error occured when loading page")
+      res.status(404).send("Error occured when loading page")
+    } finally {
+      req.session.error = null
+    }
   })
-  .post(async (req, res) => {
+  .post(async (req, res, next) => {
     if (req.body.password === config.ROOM_PASSWORD) {
       req.session.isAuthenticate = true
       req.session.username = req.body.username
 
-      // TODO: perform check for IP before creating to avoid duplication
-      // NOTE: can't do IP check on local
-      if (await User.findOne({username: req.body.username})) {
-        req.session.error = "Username already taken"  
-        res.redirect('/login')
-      } else {
-        User.create({
-          address: req.sessionID,  // default to null
+      try {
+        // TODO: perform check for IP before creating to avoid duplication
+        // NOTE: can't do IP check on local
+        if (await User.findOne({
           username: req.body.username,
-          role: await User.findOne() ? 'members' : 'admin'
-        }, (err, user) => {
-            //LOG: console.error(err)
-            //LOG: console.log(`User is created: ${user}`)
+          status: 'ACTIVE'
+        })) {
+          req.session.error = "Username already taken"  
+          res.redirect('/login')
+        } else {
+          const newUser = new User({
+            address: req.sessionID,  // default to null
+            username: req.body.username,
+            role: await User.findOne() ? 'MEMBERS' : 'ADMIN',
+            status: 'ACTIVE'
           })
 
-        res.redirect('/')
+          const registeredUser = await newUser.save()
+          req.session.documentID = registeredUser.id
+          res.redirect('/')
+        }
+      } catch(err) {
+        // LOG: console.error("Failed to register user: " + err)
+        next("Failed to register user")
       }
 
     } else {
@@ -54,10 +69,31 @@ router.route('/login')
     }
   })
 
-router.get('/logout', (req,res) => {
-  req.session.destroy((err) => {
-    //LOG: if (err) console.error("Error occured when logging out: " + err)
-    res.redirect('/login')
+router.get('/logout', async (req, res, next) => {
+  try {
+    User.deleteOne({_id: req.session.documentID}, (err, deletedUser) => {
+      if (err) {
+        throw new Error(err)
+        // LOG: if (err) console.error("Failed to delete user from database: " + err)
+      }
+      req.session.destroy((err) => {
+        if (err) {
+          throw new Error(err)
+          // LOG: if (err) console.error("Failed to destroy session: " + err)
+        }
+        res.redirect('/login')
+      })
+    })
+  } catch(err) {
+    // LOG: if (err) console.error("Error occured when logging out: " + err)
+    next("Error occured when logging out")
+  }
+})
+
+router.get('/error', (req, res) => {
+  res.render('error', {
+    page: 'ERROR',
+    error: 'Error!'
   })
 })
 
