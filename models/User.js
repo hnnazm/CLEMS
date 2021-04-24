@@ -11,7 +11,12 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    default: 'members'
+    enum: ['ADMIN', 'MEMBERS'],
+    default: 'MEMBERS'
+  },
+  status: {
+    type: String,
+    enum: ['ACTIVE', 'REMOVED'],
   },
   socketID: {
     type: String,
