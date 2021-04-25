@@ -1,39 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= locals.title %> | <%= page %></title>
     <link rel="stylesheet" href="./css/chat.css">
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="chat-main-container">
-        <div id="chat-container">
-            <div id="chat-header">
-                <button id="btn-logout" class="btn-text" type="submit">Logout</button>
-                <h1>Room #1</h1>
-                <button id="btn-settings"class="btn-text" type="submit">Settings</button>
-            </div>
-            <div id="chat-content"></div>
-            <div id="chat-input">
-                <form action="">
-                    <input type="text" name="message" id="message">
-                    <input type="button" value="M">
-                    <input type="button" value="V">
-                </form>
-            </div>
+      <div id="chat-container">
+        <div id="chat-header">
+          <button id="btn-logout" class="btn-text" type="submit">Logout</button>
+          <h1>Room #1</h1>
+          <button id="btn-settings"class="btn-text" type="submit">Settings</button>
         </div>
+        <div id="chat-content"></div>
+        <div id="chat-util"></div>
+        <div id="chat-input">
+          <form action="/send" method="POST">
+            <div class="btn-media-wrapper">
+              <button class="btn-media">M</button>
+              <input type="file" id="media" name="media" />
+            </div>
+            <input type="text" name="message" id="message" />
+            <input type="submit" class="btn-media" name="send" id="send" value="S" />
+          </form>
+        </div>
+      </div>
     </div>
     <script src="/socket.io/socket.io.js"></script>
-        <script>
-            var iOS = navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
-            if (iOS) document.head.querySelector('meta[name="viewport"]').content = "width=device-width, initial-scale=1, maximum-scale=1"
-            else document.head.querySelector('meta[name="viewport"]').content = "width=device-width, initial-scale=1"
-        </script>
+    <script>
+      var iOS = navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+      if (iOS) document.head.querySelector('meta[name="viewport"]').content = "width=device-width, initial-scale=1, maximum-scale=1"
+      else document.head.querySelector('meta[name="viewport"]').content = "width=device-width, initial-scale=1"
+    </script>
     <script src="./js/main.js"></script>
-</body>
+  </body>
 
 </html>
