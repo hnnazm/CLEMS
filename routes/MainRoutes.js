@@ -1,18 +1,21 @@
-const config = require('./config')
+const config = require('../config')
+const db = require('../db')
 const express = require('express')
-const middleware = require('./middleware')
+const middleware = require('../middleware')
 const router = express.Router()
-const User = require('./models/User')
+const User = require('../models/User')
 
 router.get('/', middleware.checkAuthentication, (req, res) => {
   res.render('index', {
     page: 'HOME',
+    username: req.session.username
   })
 })
 
 router.get('/settings', middleware.checkAuthentication, (req, res) => {
   res.render('settings', {
     page: 'SETTINGS',
+    isAdmin: req.session.isAdmin
   })
 })
 
@@ -27,7 +30,7 @@ router.route('/login')
     } catch(err) {
       // LOG: console.error("Failed to load page: " + err)
       // next("Error occured when loading page")
-      res.status(404).send("Error occured when loading page")
+      res.status(404).end()
     } finally {
       req.session.error = null
     }
@@ -50,17 +53,18 @@ router.route('/login')
           const newUser = new User({
             address: req.sessionID,  // default to null
             username: req.body.username,
-            role: await User.findOne() ? 'MEMBERS' : 'ADMIN',
+            role: await User.findOne({ status: 'ACTIVE' }) ? 'MEMBERS' : 'ADMIN',
             status: 'ACTIVE'
           })
 
           const registeredUser = await newUser.save()
           req.session.documentID = registeredUser.id
+          req.session.isAdmin = registeredUser.role === 'ADMIN' ? true : false
           res.redirect('/')
         }
       } catch(err) {
         // LOG: console.error("Failed to register user: " + err)
-        next("Failed to register user")
+        next(err)
       }
 
     } else {
@@ -69,26 +73,38 @@ router.route('/login')
     }
   })
 
-router.get('/logout', async (req, res, next) => {
+router.get('/logout', middleware.checkAuthentication, async (req, res, next) => {
   try {
-    User.deleteOne({_id: req.session.documentID}, (err, deletedUser) => {
-      if (err) {
-        throw new Error(err)
-        // LOG: if (err) console.error("Failed to delete user from database: " + err)
-      }
-      req.session.destroy((err) => {
+    User.findOneAndUpdate({ _id: req.session.documentID },
+      { status: 'INACTIVE' }, { new: true }, (err, doc) => {
         if (err) {
           throw new Error(err)
-          // LOG: if (err) console.error("Failed to destroy session: " + err)
+          // LOG: if (err) console.error("Failed to delete user from database: " + err)
         }
-        res.redirect('/login')
+        User.findOne({
+          status: 'ACTIVE',
+          role: { $ne: 'ADMIN' }
+        }, (err, user) => {
+            // LOG: if (err) console.error("Failed to assign role to other members: " + err)
+            if (user) {
+              user.role = 'ADMIN'
+              user.save()
+            }
+          })
+        req.session.destroy((err) => {
+          if (err) {
+            throw new Error(err)
+            // LOG: if (err) console.error("Failed to destroy session: " + err)
+          }
+          res.redirect('/login')
+        })
       })
-    })
   } catch(err) {
     // LOG: if (err) console.error("Error occured when logging out: " + err)
     next("Error occured when logging out")
   }
 })
+
 
 router.get('/error', (req, res) => {
   res.render('error', {
