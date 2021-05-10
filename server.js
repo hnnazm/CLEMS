@@ -27,55 +27,83 @@ app.set('serverSocket', io)     // access with req.app.get()
 // possible to make as middleware?
 
 app.use(express.urlencoded(config.EXPRESS_URLENCODED_OPTIONS))
+app.use(express.json())
 app.use(sessionMiddleware)
 app.use(express.static(path.resolve(__dirname, 'public'), {index: false}))
-app.use(route)
+app.use('/export', ExportRoutes)
+app.use('/file', FileRoutes)
+app.use('/setting', SettingRoutes)
+app.use(MainRoute)
 
 app.locals.title = 'CLEMS'
+app.locals.roomname = 'Event'
 
 io.use((socket, next) => {sessionMiddleware(socket.request, {}, next)})
 
 io.on("connection", async socket => {
   // session management
   const session = socket.request.session
-  session.connections++;
-  session.save();
+  session.connections++
+  session.save()
 
   const ip = socket.conn.remoteAddress.split(":").pop()
 
   //LOG: console.log("New client connected")
-  await User.findOneAndUpdate({ address: socket.request.sessionID }, {
+  User.findOneAndUpdate({ address: socket.request.sessionID }, {
     // insert socket id to user document
     socketID: socket.id
-  }, { new: true })
+  }, { new: true }, async (err, user) => {
+      const prevData = await Data.find().populate('sender')
+      socket.emit('join', prevData, user)
+    })
+
+  // User is typing
+  socket.on('typing', (username, isCanceling) => {
+    socket.broadcast.emit('typing', username, isCanceling)
+  })
 
   // Incoming new message
   socket.on('newMessage', async message => {
     // TODO: bind with document id for best practice
     let clientSockets = [...await io.allSockets()].filter(socketID => socketID != socket.id)
     let recipientList = new Array()
+    let data
+    let isMedia
+
     clientSockets.forEach(socketID => {
       User.findOne({ socketID }, (err, user) => {
         //LOG: if (err) console.error("Error fetching other users: " + err)
         if (user) recipientList.push(user.id)
       })
     })
-    User.findOne({socketID: socket.id}, (err, user) => {
+    User.findOne({ socketID: socket.id, status: 'ACTIVE' }, (err, user) => {
       //LOG: if (err) console.error("Error finding users: " + err)
-      Data.create({
-        type: typeof message,
-        data: message,
-        sender: user.id,
-        recipient: recipientList,     // TODO: change to user/room
-        size: 12345             // TODO: insert correct size
-      }, (err, data) => {
-          //LOG: if (err) console.error("Error creating data: " + err)
-          //LOG: console.log(data)
-          io.emit('receiveMessage', message, {
-            id: user.socketID,
-            username: user.username
+      if (message.data && message.err === null) {
+        data = message.data.filename
+        isMedia = true
+      } else {
+        data = message
+        isMedia = false
+      }
+      try {
+        Data.create({
+          type: isMedia ? 'Media' : 'String',
+          content: data,
+          sender: user.id,
+          recipient: recipientList,     // TODO: change to user/room
+          size: 12345             // TODO: insert correct size
+        }, (err, data) => {
+            //LOG: if (err) console.error("Error creating data: " + err)
+            //LOG: console.log(data)
+            io.emit('receiveMessage', {
+              socketID: user.socketID,
+              username: user.username,
+              ...data._doc,
+            })
           })
-        })
+      } catch (err) {
+        console.log(err)
+      }
     })
   })
 
@@ -83,7 +111,7 @@ io.on("connection", async socket => {
   socket.on('disconnect', () => {
     //LOG: console.log("Client disconnect")
   })
-});
+})
 
 server.listen(config.PORT, () => {
   console.log(`Server is running on port ${config.PORT}`) //LOG
