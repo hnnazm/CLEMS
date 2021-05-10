@@ -4,18 +4,20 @@ const dataSchema = new mongoose.Schema({
   type: {
     type: String
   },
-  data: {
+  content: {
     type: String
   },
   sender: {
-    type: String
+    type: mongoose.ObjectId,
+    ref: 'User'
   },
   recipient: {
-    type: [String]
+    type: [mongoose.ObjectId],
+    ref: 'User'
   },
   size: {
     type: Number
   },
-})
+}, { timestamps: { createdAt: true, updatedAt: false } })
 
 module.exports = mongoose.model('Data', dataSchema)

@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['ACTIVE', 'REMOVED'],
+    enum: ['ACTIVE', 'INACTIVE'],
   },
   socketID: {
     type: String,
@@ -24,8 +24,8 @@ const userSchema = new mongoose.Schema({
   },
   options: {
     // nested schematype
-    mutedUser: {
-      type: [String],     // array of username
+    prevUsername: {
+      type: [String],     // array of previous username
       default: [],
     }
   }
