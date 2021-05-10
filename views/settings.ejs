@@ -11,46 +11,39 @@
 
   <body>
     <header>
+      <h1><%= locals.roomname %></h1>
       <button id="btn-back" class="btn-text" type="submit">Back</button>
-      <h1>CLEMS: Room #1</h1>
     </header>
     <main>
       <h3>OPTIONS</h3>
       <section>
         <ul>
           <li>
-            <p>Receive Voice Message</p>
-            <button>Toggle</button>
+            <p>Change Username</p>
+            <button id="btn-change-username">Change</button>
           </li>
+          <% if (isAdmin) { %>
           <li>
-            <p>Receive Image File</p>
-            <button>Toggle</button>
+            <p>Change Room Name</p>
+            <button id="btn-change-roomname">Change</button>
           </li>
-          <li>
-            <p>Muted User(s)</p>
-            <button>Toggle</button>
-          </li>
+          <% } %>
         </ul>
       </section>
       <section class="user-action">
-        <button id="btn-export" class="btn-text" type="submit">Export</button>
+        <% if (isAdmin) { %>
+        <button id="btn-export-chat" class="btn-text btn-export" type="submit">Export Chats</button>
+        <button id="btn-export-user" class="btn-text btn-export" type="submit">Export Users</button>
+        <% } %>
         <button id="btn-logout" class="btn-text" type="submit">Logout</button>
       </section>
     </main>
     <footer>
-
+      <small>&copy 2021 CLEMS. All rights reserved.</small>
     </footer>
     <!-- <script src="/socket.io/socket.io.js"></script> -->
-    <script charset="utf-8">
-      // Handle the browser frame that affect viewport
-      (function viewport_adjustment() {
-        let vh = window.innerHeight * 0.01
-        document.documentElement.style.setProperty('--vh', `${vh}px`)
-      })()
-      window.addEventListener('resize', () => viewport_adjustment());
-
-      document.querySelector('#btn-back').addEventListener('click', () => window.history.back())
-    </script>
+    <script src="./js/screen.js"></script>
+    <script src="./js/settings.js"></script>
   </body>
 
 </html>
