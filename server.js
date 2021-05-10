@@ -2,9 +2,16 @@ const config = require('./config')
 const http = require('http')
 const express = require('express')
 const path = require('path')
-const route = require('./route')
 const session = require('express-session')
 const socketIO = require('socket.io')
+
+// Routing
+const ExportRoutes = require('./routes/ExportRoutes')
+const FileRoutes = require('./routes/FileRoutes')
+const MainRoute = require('./routes/MainRoutes')
+const SettingRoutes = require('./routes/SettingRoutes')
+
+// Database model
 const Data = require('./models/Data')
 const User = require('./models/User')
 
