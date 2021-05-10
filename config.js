@@ -10,9 +10,11 @@ module.exports = {
     },
     MONGOOSE_OPTIONS: {
         useNewUrlParser: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
+        useFindAndModify: false
     },
-    MONGOOSE_URI: 'mongodb://localhost:27017/test',
+    MONGOOSE_URI: 'mongodb://mongodb/test',
+    ROOM_PASSWORD: 'secret',
     SESSION_OPTIONS: {
         secret: "secret key",
         resave: false,
