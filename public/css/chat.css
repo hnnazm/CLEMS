@@ -1,18 +1,10 @@
 @import './main.css';
 
-#chat-main-container {
-  width: 100vw;
-}
-
-#chat-container {
-  height: 100%;
-  display: grid;
-  grid-template-rows: 1fr 80% 1fr;
+body {
+  grid-template-rows: 1fr 80%  1fr;
   grid-template-columns: 1fr;
   align-content: space-between;
 }
-
-
 
 /* Grid items */
 #chat-header {
@@ -41,6 +33,7 @@
   flex: 1 0 70%;
   margin-right: 0.5em;
   padding: 0.5em 0.5em;
+  border: 2px solid var(--black);
   border-radius: 0.5em;
 }
 
@@ -52,6 +45,37 @@
   border-radius: 1em;
   background-color: green;
   color: white;
+}
+
+#chat-feedback {
+  padding: 0 0.5em;
+  color: var(--gray3);
+  text-align: center;
+}
+
+.btn-media-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  flex: 0 1 auto;
+  margin-right: 0.25em;
+}
+
+.btn-media {
+  padding: 0.5em;
+  text-align: center;
+  border-radius: 0.5em;
+  border: 2px solid var(--black);
+  color: var(--gray);
+  background-color: white;
+}
+
+.btn-media-wrapper input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
 }
 
 #chat-content {
@@ -83,25 +107,24 @@
 #chat-content .message-to p:first-child {
   margin: 0 15px 0 0;
   font-size: 0.7em;
-  color: lightslategray;
+  color: var(--gray3);
 }
 
 #chat-content .message-from p:first-child {
   margin: 0 0 0 15px;
   font-size: 0.7em;
-  color: lightslategray;
+  color: var(--gray3);
 }
 
 #chat-content .message-to .message-content {
-  background-color: lightgreen;
+  background-color: var(--green);
   border-radius: 15px 15px 0 15px;
 }
 
 #chat-content .message-from .message-content {
-  background-color: lightblue;
+  background-color: var(--blue);
   border-radius: 15px 15px 15px 0;
 }
-
 
 #btn-logout {
   background-color: var(--red);
@@ -109,4 +132,11 @@
 
 #btn-settings {
   background-color: var(--gray);
+}
+
+#btn-send {
+  border: none;
+  background-color: transparent;
+  font-size: 1.5em;
+  color: var(--green2)
 }

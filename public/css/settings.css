@@ -9,7 +9,7 @@ body {
 }
 
 header {
-  justify-content: flex-start;
+  justify-content: space-between;
 }
 
 main {
@@ -38,7 +38,7 @@ main > section > ul li {
   background-color: var(--gray);
 }
 
-#btn-export {
+.btn-export {
   background-color: var(--gray);
 }
 
