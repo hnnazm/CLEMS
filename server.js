@@ -114,5 +114,5 @@ io.on("connection", async socket => {
 })
 
 server.listen(config.PORT, () => {
-  console.log(`Server is running on port ${config.PORT}`) //LOG
+  console.log(`Server is running on ${config.HOST}:${config.PORT}`) //LOG
 })
