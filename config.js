@@ -1,6 +1,6 @@
 module.exports = {
     NODE_ENV: process.env.NODE_ENV || 'development',
-    HOST: process.env.HOST || '127.0.0.1',
+    HOST: process.env.HOST || require('os').networkInterfaces()['wlan0'][0]['address'],
     PORT: process.env.PORT || 3000,
     COOKIES: {
 
@@ -13,7 +13,7 @@ module.exports = {
         useUnifiedTopology: true,
         useFindAndModify: false
     },
-    MONGOOSE_URI: 'mongodb://mongodb/test',
+    MONGOOSE_URI: 'mongodb://localhost:27017/clems',
     ROOM_PASSWORD: 'secret',
     SESSION_OPTIONS: {
         secret: "secret key",
