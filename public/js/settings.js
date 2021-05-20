@@ -3,7 +3,7 @@ document.querySelector('#btn-back').addEventListener('click', () => window.locat
 const changeUsernameButton = document.querySelector('#btn-change-username')
 changeUsernameButton.addEventListener('click', async e => {
     const newValue = prompt('Insert new username').trim()
-    const response = await fetch('/setting/username', {
+    const response = await fetch('/settings/username', {
       method: 'POST',
       body: JSON.stringify({username: newValue }),
       headers: {
@@ -21,7 +21,7 @@ try {
   const changeRoomnameButton = document.querySelector('#btn-change-roomname')
   changeRoomnameButton.addEventListener('click', async e => {
     const newValue = prompt('Insert new room name').trim()
-    const response = await fetch('/setting/roomname', {
+    const response = await fetch('/settings/roomname', {
       method: 'POST',
       body: JSON.stringify({roomname: newValue }),
       headers: {
