@@ -116,3 +116,9 @@ io.on("connection", async socket => {
 server.listen(config.PORT, () => {
   console.log(`Server is running on ${config.HOST}:${config.PORT}`) //LOG
 })
+
+process.on('SIGTERM', () => {
+  server.close(() => {
+    console.log('System terminated')
+  })
+})
