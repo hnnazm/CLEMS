@@ -105,7 +105,6 @@ router.get('/logout', middleware.checkAuthentication, async (req, res, next) => 
   }
 })
 
-
 router.get('/error', (req, res) => {
   res.render('error', {
     page: 'ERROR',
