@@ -32,7 +32,7 @@ app.use(sessionMiddleware)
 app.use(express.static(path.resolve(__dirname, 'public'), {index: false}))
 app.use('/export', ExportRoutes)
 app.use('/file', FileRoutes)
-app.use('/setting', SettingRoutes)
+app.use('/settings', SettingRoutes)
 app.use(MainRoute)
 
 app.locals.title = 'CLEMS'
