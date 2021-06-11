@@ -42,6 +42,7 @@ main > section > ul li {
   background-color: var(--gray);
 }
 
-#btn-logout {
+#btn-logout,
+#btn-delete-room {
   background-color: var(--red);
 }

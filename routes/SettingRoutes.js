@@ -33,25 +33,14 @@ router.post('/roomname', (req, res) => {
   } else res.status(403).end()
 })
 
-router.get('/dropdb', middleware.checkAuthentication, (req, res) => {
-  res.send('Hello')
-  if (req.session.isAdmin) {
-    mongoose.connection.db.dropDatabase();
-  }
-})
-
-router.get('/reboot', middleware.checkAuthentication, (req, res) => {
-  if (req.session.isAdmin) {
-    process.kill(process.pid, 'SIGTERM')
-    require('child_process').exec('reboot')
-  }
-})
-
 router.get('/terminate', middleware.checkAuthentication, (req, res) => {
   if (req.session.isAdmin) {
+    mongoose.connection.db.dropDatabase();
     process.kill(process.pid, 'SIGTERM')
     require('child_process').exec('shutdown')
+    res.send("Deleting room.. Device will shutdown.")
   }
+  else res.status(403).end()
 })
 
 module.exports = router
