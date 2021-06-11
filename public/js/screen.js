@@ -9,6 +9,6 @@ document.head.querySelector('meta[name="viewport"]').content = "width=device-wid
 ;(function viewport_adjustment() {
   let vh = window.innerHeight * 0.01
   document.documentElement.style.setProperty('--vh', `${vh}px`)
+  window.addEventListener('resize', () => viewport_adjustment())
 })()
 
-window.addEventListener('resize', () => viewport_adjustment())
