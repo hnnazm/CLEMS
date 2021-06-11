@@ -48,4 +48,6 @@ exportChatButton.addEventListener('click', () => window.location.href='/export/c
 const exportUserButton = document.querySelector('#btn-export-user')
 exportUserButton.addEventListener('click', () => window.location.href='/export/user')
 const deleteRoomButton = document.querySelector('#btn-delete-room')
-deleteRoomButton.addEventListener('click', () => window.location.href='/settings/terminate')
+deleteRoomButton.addEventListener('click', () => { 
+  if (confirm("Are you sure you want to delete room? All data will be lost and device will shutdown following this action.")) window.location.href='/settings/terminate'
+})
